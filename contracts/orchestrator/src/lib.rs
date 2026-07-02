@@ -1,17 +1,36 @@
 #![no_std]
 
-use audit_registry::{AuditRegistryClient, EncryptedNote};
 use soroban_sdk::{
     contract, contracterror, contractimpl, panic_with_error, Address, Bytes, BytesN, Env, Vec,
 };
 
-/// Reflection-style import of the compiled Nethermind SPP liquidity-pool
-/// profile. The circuit and pool logic live upstream and are never copied
-/// or modified here — only the WASM interface is bound at build time.
-mod spp_pool {
-    soroban_sdk::contractimport!(
-        file = "../../target/wasm32-unknown-unknown/release/stellar_private_payments.wasm"
+// --- CLIENT INTERFACE FOR THE PRIVACY POOL ---
+// The macro automatically generates the SppPoolClient struct. Do not define it manually.
+#[soroban_sdk::contractclient(name = "SppPoolClient")]
+trait SppPoolInterface {
+    fn transact(
+        env: Env, 
+        proofs: &Bytes, 
+        public_amount: &i128, 
+        commitments: &Vec<BytesN<32>>, 
+        nullifiers: &Vec<BytesN<32>>
     );
+}
+
+// --- CORE AUDIT COMPLIANCE SCHEMA ---
+#[soroban_sdk::contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct EncryptedNote {
+    pub ephemeral_pk: BytesN<32>,
+    pub nonce: BytesN<12>, 
+    pub ciphertext: Bytes,  
+}
+
+// --- CLIENT INTERFACE FOR THE AUDIT REGISTRY ---
+// The macro automatically generates the AuditRegistryClient struct. Do not define it manually.
+#[soroban_sdk::contractclient(name = "AuditRegistryClient")]
+trait AuditRegistryInterface {
+    fn store_note_payload(env: Env, commitment: BytesN<32>, payload: EncryptedNote);
 }
 
 #[contracterror]
@@ -47,9 +66,11 @@ impl Orchestrator {
             panic_with_error!(&env, VZeroError::LengthMismatch);
         }
 
-        let spp_client = spp_pool::Client::new(&env, &spp_pool_address);
+        // Invoke the generated client for the privacy pool
+        let spp_client = SppPoolClient::new(&env, &spp_pool_address);
         spp_client.transact(&proofs, &public_amount, &commitments, &nullifiers);
 
+        // Invoke the generated client for the audit registry vault
         let registry_client = AuditRegistryClient::new(&env, &audit_registry_address);
         for i in 0..commitments.len() {
             let commitment = commitments.get(i).unwrap();
