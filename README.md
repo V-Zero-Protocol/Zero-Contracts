@@ -77,4 +77,4 @@ Open http://localhost:3000 inside your browser to view the application interface
 To assemble optimized production bundles ready for public deployment:
 
 Bash
-npm run build
+npm run buil
