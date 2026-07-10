@@ -12,3 +12,4 @@ perf: optimize memory footprint for contract state vector allocations
 test: write unit validation tests for registry event logging
 test: write mock test sequence for orchestrator contract cross-calls
 fix: fix data serialization typing mismatch inside orchestrator
+chore: update soroban-sdk dependency version limits to v22.0.11
