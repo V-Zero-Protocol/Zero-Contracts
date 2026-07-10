@@ -4,3 +4,4 @@ feat: scaffold basic structure for orchestrator lib
 feat: scaffold template definitions for audit registry
 spec: define SppPoolInterface trait signatures
 spec: define AuditRegistryInterface trait structures
+code: implement core init methods for orchestrator
