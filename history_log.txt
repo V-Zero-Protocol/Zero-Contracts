@@ -6,3 +6,4 @@ spec: define SppPoolInterface trait signatures
 spec: define AuditRegistryInterface trait structures
 code: implement core init methods for orchestrator
 code: implement state registration handling inside audit-registry
+fix: resolve module visibility error in orchestrator/src/lib.rs
