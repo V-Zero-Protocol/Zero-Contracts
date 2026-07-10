@@ -9,3 +9,4 @@ code: implement state registration handling inside audit-registry
 fix: resolve module visibility error in orchestrator/src/lib.rs
 refactor: optimize storage layout using Soroban persistent data slots
 perf: optimize memory footprint for contract state vector allocations
+test: write unit validation tests for registry event logging
