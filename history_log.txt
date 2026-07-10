@@ -16,3 +16,4 @@ chore: update soroban-sdk dependency version limits to v22.0.11
 chore: sync soroban-env-guest and env-common crates to v22.1.3
 docs: add code documentation strings to SppPoolInterface methods
 docs: document transaction audit tracking structures in registry
+build: configure release profile optimizations inside Cargo.toml
