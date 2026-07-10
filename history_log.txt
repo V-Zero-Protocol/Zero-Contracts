@@ -1,2 +1,3 @@
 chore: init soroban workspace project setup
 config: add wasm32-unknown-unknown compilation targets
+feat: scaffold basic structure for orchestrator lib
