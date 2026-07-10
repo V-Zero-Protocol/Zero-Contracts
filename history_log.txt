@@ -22,3 +22,4 @@ bug: investigate transaction simulation failures during host testing
 fix: eliminate reference-types target features explicitly via rustflags
 build: verify contract builds successfully with clean workspace profiles
 build: add shell automation script for targeted wasm deployments
+chore: write production deployment manual markdown documentation
