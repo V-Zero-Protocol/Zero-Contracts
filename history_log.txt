@@ -13,3 +13,4 @@ test: write unit validation tests for registry event logging
 test: write mock test sequence for orchestrator contract cross-calls
 fix: fix data serialization typing mismatch inside orchestrator
 chore: update soroban-sdk dependency version limits to v22.0.11
+chore: sync soroban-env-guest and env-common crates to v22.1.3
