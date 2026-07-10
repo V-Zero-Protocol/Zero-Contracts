@@ -1,88 +1,80 @@
-# Zero-Contracts
+# V-Zero Protocol: Frontend Dashboard
 
-Zero-Contracts is a set of Soroban smart contracts for the Stellar network that enables **zero-knowledge (ZK) privacy-preserving transactions** with built-in auditability and compliance features.
+The decentralized user interface for the **V-Zero Protocol**, providing a confidential payroll workspace, contributor dashboard, and compliance audit client built with Next.js, React, and Tailwind CSS.
 
-## Overview
+---
 
-This project implements two core smart contracts working together with a Stellar Privacy Pool (SPP) to enable shielded transactions while maintaining regulatory compliance:
+## 🏗️ Architecture Integration
 
-1. **Audit Registry** - Stores encrypted audit notes and user viewing keys
-2. **Orchestrator** - Routes ZK shielded transactions through a privacy pool and mirrors audit metadata
+The frontend serves as the secure client runtime where privacy is enforced before interacting with the network:
 
-## Zero-Knowledge Features
++------------------+         Deterministic Signature         +-------------------------+
+|  Freighter UI    | --------------------------------------> | Private Viewing Key Ivsk|
+|  (User Wallet)   |                                         | (Strictly Client-Side)  |
++------------------+                                         +------------+------------+
+|                                                                |
+| Signs Encrypted Payload                                        | Decrypts Logs
+v                                                                v
++--------+---------+         Type-Safe Actions                       +----+--------------------+
+| Frontend Core UI | --------------------------------------> | Auto-Generated Bindings |
+| (Next.js App)    |                                         | (vzero-client SDK)      |
++------------------+                                         +------------+------------+
+|
+| Dispatches WASM Transaction
+v
++------------+------------+
+|  Stellar Network Ledger |
++-------------------------+
 
-Zero-Contracts is designed to integrate with zero-knowledge proof systems on Stellar:
 
-- **Shielded Transactions**: Works with SPP (Stellar Privacy Pool) to enable private asset transfers
-- **ZK Proof Verification**: Accepts and routes zero-knowledge proofs for transaction validity
-- **Commitments & Nullifiers**: Manages cryptographic commitments (shielded balances) and nullifiers (spent note tracking)
-- **Auditability with Privacy**: Stores encrypted audit metadata that can be accessed by authorized auditors without compromising transaction privacy
-- **Viewing Keys**: Users can register incoming-viewing public keys (IVPK) to grant auditors access to their encrypted notes
+* **Client-Side Cryptography:** Private viewing keys ($Ivsk$) are derived locally via deterministic wallet signatures. Plaintext records and rosters never touch the blockchain.
+* **Type-Safe Gateway:** All state modification parameters are strictly checked using an auto-scaffolded `vzero-client` package built directly from contract bytecode.
 
-## Architecture
+---
 
-### Audit Registry Contract (`contracts/audit-registry/`)
-- **Key Features**:
-  - Register and retrieve user incoming-viewing public keys (IVPK)
-  - Store encrypted audit notes against ZK commitments
-  - Uses persistent storage for viewing keys (never lost to expiry)
-  - Uses temporary storage with TTL extensions for audit payloads (~30 days)
-  - Encrypted note structure includes ephemeral public key, nonce, and ciphertext
+## 🚀 Key Features
 
-### Orchestrator Contract (`contracts/orchestrator/`)
-- **Key Features**:
-  - Atomic transaction routing between SPP privacy pool and audit registry
-  - Ensures audit compliance state always matches pool commitment set
-  - Validates payload/commitment length consistency
-  - Requires depositor authentication
-  - Routes ZK proofs, public amounts, commitments, and nullifiers to the privacy pool
-  - Stores corresponding encrypted audit payloads for each new commitment
+* **Freighter Wallet Integration:** Secure connection and cryptographic authentication via standard Stellar browser extension wallets.
+* **Deterministic Privacy Layer:** Local derivation of private viewing keys ($Ivsk$) via secure wallet signatures, ensuring financial logs stay strictly client-side.
+* **Type-Safe Contract Interactivity:** Direct integration with live Soroban smart contracts using auto-scaffolded TypeScript bindings.
+* **Responsive Architecture:** Beautiful, modern workspace layout built with optimized flexbox compositions.
 
-## Installation & Build
+---
 
-### Prerequisites
-- Rust toolchain
-- Soroban SDK 22.0.0
-- Stellar CLI (optional, for deployment)
+## 🛠️ Project Setup & Installation
 
-### Build Contracts
-
-```bash
-# Build all contracts in release mode
-cargo build --release
-
-# Build with debug logs
-cargo build --profile release-with-logs
-```
-
-## Usage
-
-### Development
-The contracts can be tested using Soroban's test utilities. Both contracts include unit tests.
+### 1. Install UI System Dependencies
+Clone the repository, verify that any duplicate lockfiles are cleared, and install the required workspace modules:
 
 ```bash
-# Run tests
-cargo test
-```
+# Clear alternative lockfiles if present to prevent package conflicts
+rm -f pnpm-lock.yaml
 
-## Project Structure
+# Install dependencies
+npm install
+2. Compile On-Chain Client Bindings
+Ensure the internal type-safe smart contract client sub-package is fully initialized and built:
 
-```
-Zero-Contracts/
-├── Cargo.toml              # Workspace configuration
-├── Cargo.lock
-├── contracts/
-│   ├── audit-registry/     # Audit Registry contract
-│   │   ├── src/
-│   │   │   └── lib.rs
-│   │   └── Cargo.toml
-│   └── orchestrator/       # Orchestrator contract
-│       ├── src/
-│       │   └── lib.rs
-│       └── Cargo.toml
-└── target/                 # Build artifacts
-```
+Bash
+# Change to the client bindings directory
+cd src/lib/vzero-client
 
-## License
+# Install binding packages and compile modules
+npm install
+npm run build
+💻 Local Development
+Navigate back out to the primary project root directory and spin up the hot-reloading local Next.js development engine:
 
-[Add your license information here]
+Bash
+# Step back out to frontend project root
+cd ../../../
+
+# Run development server
+npm run dev
+Open http://localhost:3000 inside your browser to view the application interface, connect your testnet wallet, and interact with the protocol!
+
+⚙️ Build for Production
+To assemble optimized production bundles ready for public deployment:
+
+Bash
+npm run build
