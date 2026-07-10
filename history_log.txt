@@ -17,3 +17,4 @@ chore: sync soroban-env-guest and env-common crates to v22.1.3
 docs: add code documentation strings to SppPoolInterface methods
 docs: document transaction audit tracking structures in registry
 build: configure release profile optimizations inside Cargo.toml
+fix: clear out dead code compiler warnings on contract traits
