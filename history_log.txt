@@ -3,3 +3,4 @@ config: add wasm32-unknown-unknown compilation targets
 feat: scaffold basic structure for orchestrator lib
 feat: scaffold template definitions for audit registry
 spec: define SppPoolInterface trait signatures
+spec: define AuditRegistryInterface trait structures
